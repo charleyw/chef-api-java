@@ -14,7 +14,7 @@ public class chefClientTest extends TestCase {
 	
 	@Test
 	public void testGet(){
-		ChefApiClient cac = new ChefApiClient("wang", "C:/Users/ESVWYZV/wang.pem", "http://macloud.dnsdynamic.com:4000");
+		ChefApiClient cac = new ChefApiClient("wang", "C:/Users/wang/wang.pem", "http://10.60.0.150:4000");
 ////		int code = cac.get("/clients").execute();
 //		ApiMethod am = cac.get("/clients");
 //		int code = am.execute();
@@ -22,12 +22,12 @@ public class chefClientTest extends TestCase {
 //		System.out.println(code+"  \n"+body);
 		Gson gson = new Gson();
 		JsonObject js = new JsonObject();
-		js.addProperty("name", "xx");
+		js.addProperty("name", "xxxxx");
 		
 //		String body = "{\"name\":\"usersxx\", \"admin\":\"false\"}";
 		System.out.println(js.toString());
 		ApiMethod am =cac.get("/nodes/node1");
-		int code = am.execute();
+		int code = am.execute().getReturnCode();
 		String xx = am.getResponseBodyAsString();
 		System.out.println(code+"  \n"+xx);
 	}

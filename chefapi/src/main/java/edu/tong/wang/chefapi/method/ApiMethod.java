@@ -15,24 +15,21 @@ import edu.tongji.wang.chefapi.Utils;
 public class ApiMethod {
 	private HttpClient client = null;
 	protected HttpMethod method = null;
-	protected String body = "";
+	protected String reqBody = "";
 	protected String userId = "";
 	protected String pemPath = "";
 	private String methodName = "GET";
 	
-	public ApiMethod(HttpMethod method){
-		client = new HttpClient();
-		this.method = method;
-	}
+	private int returnCode;
 	
 	public ApiMethod(String methodName){
 		client = new HttpClient();
 		this.methodName = methodName;
 	}
 	
-	public int execute(){
+	public ApiMethod execute(){
 		String hashedPath = Utils.sha1AndBase64(method.getPath());
-		String hashedBody = Utils.sha1AndBase64(body);
+		String hashedBody = Utils.sha1AndBase64(reqBody);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -72,7 +69,7 @@ public class ApiMethod {
 			e.printStackTrace();
 		}
 		
-		return code;
+		return this;
 	}
 	
 	public void setHeaders(Header[] headers){
@@ -92,13 +89,17 @@ public class ApiMethod {
 		}
 		return reqBody;
 	}
-
-	public String getBody() {
-		return body;
+	
+	public int getReturnCode(){
+		return returnCode;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public String getReqBody() {
+		return reqBody;
+	}
+
+	public void setReqBody(String body) {
+		this.reqBody = body;
 	}
 
 	public String getUserId() {

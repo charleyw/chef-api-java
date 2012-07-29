@@ -11,7 +11,7 @@ public class Post extends ApiMethod {
 	}
 	
 	public ApiMethod body(String body){
-		this.body = body;
+		this.reqBody = body;
 		PostMethod post = (PostMethod) method;
 		post.setRequestBody(body);
 		return this;
