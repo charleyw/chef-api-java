@@ -1,0 +1,7 @@
+@startuml
+ExternalReq -> cloudready:createInstance()
+cloudready -> instanceManager:runInstances()
+create instance
+instanceManager-> instance:new
+
+@enduml
