@@ -11,11 +11,10 @@ public abstract class Instance {
 //	public String 
 	private List<Server> servers;
 	
-	public Instance(String name, String type, String owner){
+	public Instance(String id, String name, String type){
 		this.type = type;
 		this.name = name;
-		this.owner = owner;
-		id = UUID.randomUUID().toString(); 
+		this.id = id;
 	}
 
 	public List<Server> getServers() {

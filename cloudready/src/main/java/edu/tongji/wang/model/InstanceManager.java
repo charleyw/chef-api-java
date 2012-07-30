@@ -5,6 +5,6 @@ public abstract class InstanceManager {
 		
 	}
 	
-	public abstract Instance newInstance();
-	public abstract void deleteInstance();
+	public abstract Instance newInstance(String type);
+	public abstract void deleteInstance(String id);
 }
