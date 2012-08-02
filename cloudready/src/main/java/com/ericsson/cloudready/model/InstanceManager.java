@@ -1,4 +1,4 @@
-package edu.tongji.wang.model;
+package com.ericsson.cloudready.model;
 
 public abstract class InstanceManager {
 	public InstanceManager(){

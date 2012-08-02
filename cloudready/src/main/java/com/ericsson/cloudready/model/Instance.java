@@ -1,9 +1,9 @@
-package edu.tongji.wang.model;
+package com.ericsson.cloudready.model;
 
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Instance {
+public class Instance {
 	private String id;
 	private String type;
 	private String name;
@@ -36,5 +36,25 @@ public abstract class Instance {
 	public String getOwner() {
 		return owner;
 	}
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 	
 }

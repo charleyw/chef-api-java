@@ -1,7 +1,11 @@
-package edu.tongji.wang.cloudready;
+package com.ericsson.cloudready;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -14,21 +18,19 @@ import com.google.gson.JsonParser;
  * Hello world!
  * 
  */
-public class App {
+public class Utils {
     private static String opToken = "";
     private static Calendar tokenDate;
-    public static void main(String[] args) {
-        Calendar ca = Calendar.getInstance();
-        ca.add(Calendar.DAY_OF_MONTH, -2);
-        tokenDate = ca;
-        getOpToken();
+    
+    public static String getToken(){
+        
+        return null;
     }
     
-    public static String getOpToken(){
-        Calendar ca = Calendar.getInstance();
-        ca.add(Calendar.HOUR_OF_DAY, -24);
-        if(ca.after(tokenDate)){
-            PostMethod post = new PostMethod("http://macloud.dnsdynamic.com:5000/v2.0/token");
+    @SuppressWarnings("deprecation")
+    public static String getOpToken(File file){
+
+            PostMethod post = new PostMethod("http://macloud.dnsdynamic.com:5000/v2.0/tokens");
             String reqBody = "{ \"auth\":{ \"passwordCredentials\":{ \"username\":\"adminUser\", \"password\":\"123123\" }, \"tenantName\":\"admin\" } }";
             post.addRequestHeader("Content-Type", "application/json");
             post.setRequestBody(reqBody);
@@ -39,7 +41,9 @@ public class App {
                     JsonParser parser = new JsonParser();
                     JsonObject o = (JsonObject)parser.parse(post.getResponseBodyAsString());
                     //TODO edit for the correct path
-                    opToken = o.get("xxx").getAsString();
+                    JsonObject jsele = o.getAsJsonObject("access").getAsJsonObject("token");
+                    String token = jsele.get("id").getAsString();
+                    opToken = token;
                     tokenDate = Calendar.getInstance();
                 }
             } catch (HttpException e) {
@@ -48,7 +52,22 @@ public class App {
                 e.printStackTrace();
             }
             
-        }
+            BufferedWriter bw = null;
+            try {
+                bw = new BufferedWriter(new FileWriter(file));
+                Date date = new Date();
+                long now = date.getTime();
+                bw.write(now+":"+opToken);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    bw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
         return opToken;
     }
 }

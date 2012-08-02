@@ -14,7 +14,7 @@ public class chefClientTest extends TestCase {
 	
 	@Test
 	public void testGet(){
-		ChefApiClient cac = new ChefApiClient("wang", "C:/Users/wang/wang.pem", "http://10.60.0.150:4000");
+		ChefApiClient cac = new ChefApiClient("wang", "C:/Users/ESVWYZV/wang.pem", "http://macloud.dnsdynamic.com:4000");
 ////		int code = cac.get("/clients").execute();
 //		ApiMethod am = cac.get("/clients");
 //		int code = am.execute();

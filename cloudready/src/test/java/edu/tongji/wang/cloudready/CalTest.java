@@ -17,5 +17,11 @@ public class CalTest extends TestCase {
         if(ca.before(Calendar.getInstance())){
             System.out.println("-24:"+ca.getTime());
         }
+        
+        Date lastday = ca.getTime();
+        Date today = Calendar.getInstance().getTime();
+        System.out.println("l:"+lastday.getTime());
+        System.out.println("t:"+today.getTime());
+        
     }
 }
