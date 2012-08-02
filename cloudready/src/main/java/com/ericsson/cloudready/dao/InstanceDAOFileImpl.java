@@ -34,8 +34,9 @@ public class InstanceDAOFileImpl implements InstanceDAO {
 
     public List<Instance> getAllInstances() {
         List<Instance> result = new ArrayList<Instance>();
+        BufferedReader br = null;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(dbFile));
+            br = new BufferedReader(new FileReader(dbFile));
             String line = null;
            
             ServerDAO serverDAO = new ServerDAOFileImpl();
@@ -51,6 +52,12 @@ public class InstanceDAOFileImpl implements InstanceDAO {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+        	try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
         }
         return result;
     }

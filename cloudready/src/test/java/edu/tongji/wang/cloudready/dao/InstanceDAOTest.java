@@ -14,7 +14,6 @@ import com.ericsson.cloudready.model.Server;
 public class InstanceDAOTest {
 
     @Test
-    @Ignore
     public void testAddInstance() {
         InstanceDAO dao = new InstanceDAOFileImpl();
         Instance in = new Instance("PG1", "PG1", "PGSA");
@@ -43,6 +42,7 @@ public class InstanceDAOTest {
     }
     
     @Test
+    @Ignore
     public void testDeleteInstance(){
         InstanceDAO dao = new InstanceDAOFileImpl();
         
