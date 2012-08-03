@@ -1,4 +1,4 @@
-package edu.tong.wang.chefapi.method;
+package edu.tongji.wang.chefapi.method;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

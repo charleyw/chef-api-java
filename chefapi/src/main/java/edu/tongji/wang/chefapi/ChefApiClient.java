@@ -4,8 +4,8 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
-import edu.tong.wang.chefapi.method.Get;
-import edu.tong.wang.chefapi.method.Post;
+import edu.tongji.wang.chefapi.method.Get;
+import edu.tongji.wang.chefapi.method.Post;
 
 public class ChefApiClient {
 	private String endpoint;

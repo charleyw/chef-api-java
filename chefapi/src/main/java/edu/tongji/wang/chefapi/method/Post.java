@@ -1,4 +1,4 @@
-package edu.tong.wang.chefapi.method;
+package edu.tongji.wang.chefapi.method;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
