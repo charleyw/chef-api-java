@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -89,6 +90,10 @@ public class InstanceDAODBImpl implements InstanceDAO {
 			while(rs.next()){
 				Instance instance = new Instance(rs.getString("Id"), rs.getString("name"), rs.getString("type"));
 				instance.setOwner("admin");
+				instance.setStatus(rs.getString("status"));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String startTime = sdf.format(rs.getTimestamp("startTime"));
+				instance.setStartTime(startTime);
 				List<Server> servers = dao.getServerByIId(instance.getId());
 				instance.setServers(servers);
 				instances.add(instance);
@@ -131,6 +136,10 @@ public class InstanceDAODBImpl implements InstanceDAO {
 			while(rs.next()){
 				instance = new Instance(rs.getString("Id"), rs.getString("name"), rs.getString("type"));
 				instance.setOwner("admin");
+				instance.setStatus(rs.getString("status"));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				String startTime = sdf.format(rs.getTimestamp("startTime"));
+				instance.setStartTime(startTime);
 				List<Server> servers = dao.getServerByIId(instance.getId());
 				instance.setServers(servers);
 			}

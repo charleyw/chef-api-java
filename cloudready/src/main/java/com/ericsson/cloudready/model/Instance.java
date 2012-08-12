@@ -8,7 +8,8 @@ public class Instance {
 	private String type;
 	private String name;
 	private String owner;
-//	public String 
+	private String status;
+	private String StartTime;
 	private List<Server> servers;
 	
 	public Instance(String id, String name, String type){
@@ -16,6 +17,23 @@ public class Instance {
 		this.name = name;
 		this.id = id;
 	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStartTime() {
+		return StartTime;
+	}
+
+	public void setStartTime(String startTime) {
+		StartTime = startTime;
+	}
+
 
 	public List<Server> getServers() {
 		return servers;
