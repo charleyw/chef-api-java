@@ -92,7 +92,7 @@ public class ServerDAOFileImpl implements ServerDAO {
         }
     }
 
-    public boolean deleteServer(String id) {
+    public void deleteServer(String id) {
         List<Server> servers = new ArrayList<Server>();
         BufferedReader br = null;
         try {
@@ -151,10 +151,9 @@ public class ServerDAOFileImpl implements ServerDAO {
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
-    public boolean deleteServerByIid(String instanceId) {
+    public void deleteServerByIid(String instanceId) {
         List<Server> servers = new ArrayList<Server>();
         BufferedReader br = null;
         try {
@@ -213,7 +212,6 @@ public class ServerDAOFileImpl implements ServerDAO {
                 e.printStackTrace();
             }
         }
-        return true;
     }
 
 }

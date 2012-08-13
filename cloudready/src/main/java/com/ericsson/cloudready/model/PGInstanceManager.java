@@ -33,7 +33,7 @@ public class PGInstanceManager extends InstanceManager {
     
     public static Logger LOG = LoggerFactory.getLogger(PGInstanceManager.class);
     
-    private static String CHEF_NODE_STR = "{  \"name\": \"NODENAME\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { \"hardware_type\": \"laptop\" },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ \"recipe[install_pg]\",\"recipe[install_license]\",\"recipe[install_pm_chef]\" ] }";
+    private static String CHEF_NODE_STR = "{  \"name\": \"NODENAME\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { \"instanceId\": \"INSTANCEID\" },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ \"recipe[install_pg]\",\"recipe[install_license]\",\"recipe[install_pm]\" ] }";
     
     @Override
     public Instance newInstance(String name, final String type) {
@@ -71,12 +71,16 @@ public class PGInstanceManager extends InstanceManager {
 			                if(ipObj!=null){
 			                    ipPrivateObj = ipObj.getAsJsonArray("private");
 			                }else{
+			                    LOG.debug("wait 2s for next try...");
+			                    Thread.sleep(2000);
 			                    continue;
 			                }
 			                
 			                if(ipPrivateObj!=null){
 			                    ipaddress = ipPrivateObj.get(0).getAsJsonObject().get("addr").getAsString();
 			                }else{
+			                    LOG.debug("wait 2s for next try...");
+			                    Thread.sleep(2000);
 			                    continue;
 			                }
 			                
@@ -95,6 +99,8 @@ public class PGInstanceManager extends InstanceManager {
 			                	instance.setServers(servers);
 			                	
 			                	LOG.debug("begin to create chef node: "+ serverName);
+			                	String reqString = CHEF_NODE_STR.replace("NODENAME", serverName);
+			                	reqString = reqString.replace("INSTANCEID", iid);
 			                	createChefNode(serverName, type);
 			                	
 			                	InstanceDAO dao = new InstanceDAOFileImpl();
@@ -103,7 +109,7 @@ public class PGInstanceManager extends InstanceManager {
 			                	ipNotGot = false;
 			                	return;
 			                }
-			                Thread.sleep(1000);
+			                
 			            }
 			        } catch (HttpException e) {
 			            e.printStackTrace();
@@ -138,7 +144,7 @@ public class PGInstanceManager extends InstanceManager {
      * @return
      * @throws Throwable 
      */
-    private boolean createChefNode(String nodeName, String type) throws Throwable{
+    private boolean createChefNode(String nodeName, String reqStr) throws Throwable{
         String pemPath = getClass().getResource("/wang.pem").getPath();
         LOG.debug("Get pem at: "+pemPath);
         ChefApiClient cac = new ChefApiClient("wang", pemPath, "http://macloud.dnsdynamic.com:4000");
@@ -237,6 +243,24 @@ public class PGInstanceManager extends InstanceManager {
             }
         }
         return null;
+    }
+    
+    /**
+     * request String of chef node
+     * @author esvwyzv
+     *
+     */
+    private class NodeString{
+        /**
+         * before use, the string NODENAME ATTRIBUTES and RECIPES should be replaced by the correct words
+         */
+        private String NODE_STR = "{  \"name\": \"NODENAME\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { ATTRIBUTES },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ RECIPES ] }";
+        
+        private StringBuilder sb;
+        public NodeString(String nodeName){
+            sb = new StringBuilder(NODE_STR);
+//            sb.
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import com.ericsson.cloudready.model.Server;
 public interface ServerDAO {
     public List<Server> getServerByIId(String instanceId);
     public void addServer(Server server);
-    public boolean deleteServer(String id);
-    public boolean deleteServerByIid(String instanceId);
+    public void deleteServer(String id);
+    public void deleteServerByIid(String instanceId);
     
 }

@@ -53,7 +53,6 @@ public class Utils {
 			byte[] signature = instance.sign();
 			outStr = Base64.encode(signature);
 			String tmp = new String(outStr);
-			System.out.println(tmp);
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

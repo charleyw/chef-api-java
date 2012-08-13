@@ -24,4 +24,9 @@ public class TestCls {
         new Thread(run).start();
         return "started";
     }
+    
+    public static void main(String[] args){
+        TestCls cl = new TestCls();
+        cl.startThread();
+    }
 }
