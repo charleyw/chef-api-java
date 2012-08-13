@@ -9,8 +9,8 @@ public class PGInstanceManagerTest {
     @Test
     public void testGetToken() {
         PGInstanceManager pm = new PGInstanceManager();
-        String token = pm.getOpToken();
-        System.out.println("Token: "+token);
+        Instance instance = pm.newInstance("FIRST_TEST", "PG_standalone");
+        
     }
 
 }
