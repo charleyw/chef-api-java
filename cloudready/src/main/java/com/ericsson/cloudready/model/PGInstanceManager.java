@@ -20,10 +20,12 @@ import org.slf4j.LoggerFactory;
 
 import com.ericsson.cloudready.Utils;
 import com.ericsson.cloudready.dao.InstanceDAO;
+import com.ericsson.cloudready.dao.InstanceDAODBImpl;
 import com.ericsson.cloudready.dao.InstanceDAOFileImpl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import edu.tongji.wang.chefapi.ChefApiClient;
 import edu.tongji.wang.chefapi.method.ApiMethod;
@@ -33,7 +35,7 @@ public class PGInstanceManager extends InstanceManager {
     
     public static Logger LOG = LoggerFactory.getLogger(PGInstanceManager.class);
     
-    private static String CHEF_NODE_STR = "{  \"name\": \"NODENAME\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { \"instanceId\": \"INSTANCEID\" },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ \"recipe[install_pg]\",\"recipe[install_license]\",\"recipe[install_pm]\" ] }";
+    private static String CHEF_DATA_BAG="instanceIds";
     
     @Override
     public Instance newInstance(String name, final String type) {
@@ -98,12 +100,25 @@ public class PGInstanceManager extends InstanceManager {
 			                	servers.add(server);
 			                	instance.setServers(servers);
 			                	
-			                	LOG.debug("begin to create chef node: "+ serverName);
-			                	String reqString = CHEF_NODE_STR.replace("NODENAME", serverName);
-			                	reqString = reqString.replace("INSTANCEID", iid);
-			                	createChefNode(serverName, type);
+			                	JsonObject obb = new JsonObject();
+			                	obb.addProperty("id", serverName);
+			                	obb.addProperty("instanceId", iid);
+			                	obb.addProperty("reportUrl", "http://192.168.100.4:8080/cloudready/logs");
+			                	LOG.debug("begin to create chef databag item: "+ obb.toString());
+			                	createChefDataItem(serverName, obb.toString());
 			                	
-			                	InstanceDAO dao = new InstanceDAOFileImpl();
+			                	LOG.debug("begin to create chef node: "+ serverName);
+			                	NodeString ns = new NodeString(serverName);
+			                	ns.addAttribute("instanceId", iid);
+			                	ns.addAttribute("reportUrl", "http://192.168.100.4:8080/cloudready/logs");
+			                	ns.addRunList("install_pg");
+			                	ns.addRunList("install_license");
+			                	ns.addRunList("install_pm");
+			                	String reqBody = ns.build();
+			                	LOG.debug("request body: "+ reqBody);
+			                	createChefNode(serverName, reqBody);
+			                	
+			                	InstanceDAO dao = new InstanceDAODBImpl();
 			                	dao.addInstance(instance);
 			                	
 			                	ipNotGot = false;
@@ -137,6 +152,25 @@ public class PGInstanceManager extends InstanceManager {
     public void deleteInstance(String id) {
     }
     
+    private boolean createChefDataItem(String id, String reqBody) {
+        String pemPath = getClass().getResource("/wang.pem").getPath();
+        LOG.debug("Get pem at: "+pemPath);
+        ChefApiClient cac = new ChefApiClient("wang", pemPath, "http://macloud.dnsdynamic.com:4000");
+        
+        cac.delete("/data/instanceIds/"+id).execute();
+        ApiMethod am = cac.post("/data/instanceIds").body(reqBody).execute();
+        int code = am.getReturnCode();
+        LOG.debug("return code: "+code+"\n"+am.getResponseBodyAsString());
+        if(code>=400){
+            LOG.error("create node failed:");
+            LOG.error("return code: "+code);
+            LOG.error("response: "+am.getResponseBodyAsString());
+            return false;
+            
+        }        
+        return true;
+    }
+    
     /**
      * 
      * @param nodeName node name in the chef server
@@ -144,15 +178,14 @@ public class PGInstanceManager extends InstanceManager {
      * @return
      * @throws Throwable 
      */
-    private boolean createChefNode(String nodeName, String reqStr) throws Throwable{
+    private boolean createChefNode(String nodeName, String reqBody) throws Throwable{
         String pemPath = getClass().getResource("/wang.pem").getPath();
         LOG.debug("Get pem at: "+pemPath);
         ChefApiClient cac = new ChefApiClient("wang", pemPath, "http://macloud.dnsdynamic.com:4000");
         //delete all nodes and clients named nodeName before create
         cac.delete("/nodes/"+nodeName).execute();
         cac.delete("/clients/"+nodeName).execute();
-        
-        String reqBody = CHEF_NODE_STR.replace("NODENAME", nodeName);
+
         LOG.debug("creating node and request body is: "+reqBody);
         ApiMethod am = cac.post("/nodes").body(reqBody).execute();
         int code = am.getReturnCode();
@@ -161,7 +194,7 @@ public class PGInstanceManager extends InstanceManager {
             LOG.error("create node failed:");
             LOG.error("return code: "+code);
             LOG.error("response: "+am.getResponseBodyAsString());
-            throw new Throwable("Create chef node failed:\n"+am.getResponseBodyAsString());
+            return false;
             
         }
         return true;
@@ -250,17 +283,42 @@ public class PGInstanceManager extends InstanceManager {
      * @author esvwyzv
      *
      */
-    private class NodeString{
-        /**
-         * before use, the string NODENAME ATTRIBUTES and RECIPES should be replaced by the correct words
-         */
-        private String NODE_STR = "{  \"name\": \"NODENAME\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { ATTRIBUTES },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ RECIPES ] }";
+    public static class NodeString{
         
-        private StringBuilder sb;
+        private JsonObject node;
+        private JsonObject attr;
+        private JsonObject over;
+        private JsonObject defaults;
+        private JsonArray runList;
         public NodeString(String nodeName){
-            sb = new StringBuilder(NODE_STR);
-//            sb.
+            node = new JsonObject();
+            node.addProperty("name", nodeName);
+            node.addProperty("chef_type", "node");
+            node.addProperty("json_class", "Chef::Node");
+            attr = new JsonObject();
+            defaults = new JsonObject();
+            over = new JsonObject();
+            runList = new JsonArray();
+        }
+        
+        public NodeString addAttribute(String name, String value){
+            attr.addProperty(name, value);
+            return this;
+        }
+        
+        public NodeString addRunList(String name){
+            String recipe = "recipe["+name+"]";
+            JsonPrimitive jp = new JsonPrimitive(recipe);
+            runList.add(jp);
+            return this;
+        }
+        
+        public String build(){
+            node.add("attributes", attr);
+            node.add("run_list", runList);
+            node.add("defaults", defaults);
+            return node.toString();
         }
     }
-
+    
 }

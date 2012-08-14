@@ -13,8 +13,8 @@ public class LogDAOTest {
     @Test
     public void testLog(){
         LogDAO dao = new LogDAODBImpl();
-        for (int i = 0; i < 10; i++) {
-            dao.log("test"+ i, "testsatset");
+        for (int i = 0; i < 5; i++) {
+            dao.log("11c69fe9-1858-4853-9da2-54bca1de40f3", "testsatset");
         }
         
     }

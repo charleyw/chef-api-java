@@ -14,7 +14,7 @@ public class TestLog {
     public static void main(String[] args) {
         PostMethod post = new PostMethod("http://192.168.100.4:8080/cloudready/logs");
         post.setRequestBody("{\"instanceId\":\"test2\", \"msg\":\"test\"}");
-        post.addRequestHeader("Content-Type", "applicaiton/json");
+//        post.addRequestHeader("Content-Type", "applicaiton/json");
         HttpClient client = new HttpClient();
         try {
             client.executeMethod(post);

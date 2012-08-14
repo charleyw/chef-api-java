@@ -66,7 +66,41 @@ public class InstanceDAODBImpl implements InstanceDAO {
 	}
 
 	public Instance updateInstance(Instance instance) {
-		return null;
+        PreparedStatement stmtInsert = null;
+        Connection conn = null;
+        try {
+            Class.forName(Constants.DRIVER);
+
+            conn = DriverManager.getConnection(Constants.DB_URL, Constants.DB_USER, Constants.DB_PWD);
+            
+            StringBuilder sbInsert = new StringBuilder();
+            sbInsert.append("UPDATE ");
+            sbInsert.append(TABLE_NAME);
+            sbInsert.append(" SET name=?, type=?, owner=?, status=? ");
+            sbInsert.append("WHERE Id=?");
+            
+            stmtInsert = conn.prepareStatement(sbInsert.toString());
+            stmtInsert.setString(1, instance.getName());
+            stmtInsert.setString(2, instance.getType());
+            stmtInsert.setInt(3, 0);
+            //TODO add user support
+            stmtInsert.setString(4, instance.getStatus());
+            stmtInsert.setString(5, instance.getId());
+            
+            stmtInsert.execute();
+            
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
 	}
 
 	public List<Instance> getAllInstances() {
