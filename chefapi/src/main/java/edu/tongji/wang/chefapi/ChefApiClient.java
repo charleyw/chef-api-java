@@ -1,9 +1,11 @@
 package edu.tongji.wang.chefapi;
 
 import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
+import edu.tongji.wang.chefapi.method.Delete;
 import edu.tongji.wang.chefapi.method.Get;
 import edu.tongji.wang.chefapi.method.Post;
 
@@ -41,6 +43,13 @@ public class ChefApiClient {
 		post.setPemPath(pemPath);
 		post.setUserId(userId);
 		return post;
+	}
+	
+	public Delete delete(String path){
+	    Delete del = new Delete(new DeleteMethod(endpoint+path));
+	    del.setPemPath(pemPath);
+	    del.setUserId(userId);
+	    return del;
 	}
 	
 	public Header[] buildHeaders(){

@@ -11,24 +11,20 @@ import com.google.gson.JsonObject;
 import edu.tongji.wang.chefapi.method.ApiMethod;
 
 public class chefClientTest extends TestCase {
-	
+    private static String CHEF_NODE_STR = "{  \"name\": \"latte\",  \"chef_type\": \"node\",  \"json_class\": \"Chef::Node\",  \"attributes\": { \"hardware_type\": \"laptop\" },  \"overrides\": {  },  \"defaults\": {  },  \"run_list\": [ \"recipe[install_pg]\",\"recipe[install_license]\",\"recipe[install_pm]\" ] }";
 	@Test
 	public void testGet(){
 		ChefApiClient cac = new ChefApiClient("wang", "C:/Users/ESVWYZV/wang.pem", "http://macloud.dnsdynamic.com:4000");
-////		int code = cac.get("/clients").execute();
-//		ApiMethod am = cac.get("/clients");
-//		int code = am.execute();
-//		String body = am.getResponseBodyAsString();
-//		System.out.println(code+"  \n"+body);
-		Gson gson = new Gson();
-		JsonObject js = new JsonObject();
-		js.addProperty("name", "xxxxx");
-		
-//		String body = "{\"name\":\"usersxx\", \"admin\":\"false\"}";
-		System.out.println(js.toString());
+
 		ApiMethod am =cac.get("/nodes/node1");
 		int code = am.execute().getReturnCode();
 		String xx = am.getResponseBodyAsString();
 		System.out.println(code+"  \n"+xx);
+		
+//		ApiMethod am2 = cac.post("/nodes").body(CHEF_NODE_STR).execute();
+		
+//		System.out.println(code+"  \n"+am2.getResponseBodyAsString());
+		
+		cac.delete("/nodes"+"/"+"latte").execute();
 	}
 }

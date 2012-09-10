@@ -5,28 +5,26 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ericsson.cloudready.dao.LogDAO;
-import com.ericsson.cloudready.dao.LogDAOFileImpl;
+import com.ericsson.cloudready.dao.LogDAODBImpl;
+import com.ericsson.cloudready.model.LogMsg;
 
 public class LogDAOTest {
     
     @Test
     public void testLog(){
-        LogDAO dao = new LogDAOFileImpl("PG1");
-        dao.info("tes2t");
-        dao.info("tes2t2");
-        dao.info("test");
-        dao.info("te2st");
-        dao.info("tes2t");
-        dao.info("tes222t");
-        dao.info("te2st");
+        LogDAO dao = new LogDAODBImpl();
+        for (int i = 0; i < 5; i++) {
+            dao.log("11c69fe9-1858-4853-9da2-54bca1de40f3", "testsatset");
+        }
+        
     }
     
     @Test
     public void testGetLog(){
-        LogDAO dao = new LogDAOFileImpl("PG1");
-        List<String> ss = dao.getLogByIId("PG1");
-        for(String s : ss){
-            System.out.println(s);
+        LogDAO dao = new LogDAODBImpl();
+        List<LogMsg> logs = dao.getLogMsgByIid("test1");
+        for (LogMsg log : logs) {
+            System.out.println("id:"+log.getLoggerId()+" time:"+log.getLogTime()+" msg:"+log.getLogMsg());
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.ericsson.cloudready.dao;
+/*package com.ericsson.cloudready.dao;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.ericsson.cloudready.model.LogMsg;
 
 public class LogDAOFileImpl implements LogDAO {
     
@@ -83,4 +85,20 @@ public class LogDAOFileImpl implements LogDAO {
         }
     }
 
+    public void log(String iid, String msg) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public List<LogMsg> getLogMsgByIid(String instanceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void deleteLogMsgsByIid(String instanceId) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
+*/
