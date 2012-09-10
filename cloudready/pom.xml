@@ -34,13 +34,13 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
-			<version>1.12</version>
+			<version>1.2</version>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-grizzly2</artifactId>
 			<version>1.12</version>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -52,4 +52,17 @@
 			<version>5.1.1</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<configuration>
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<stopKey>foo</stopKey>
+					<stopPort>9999</stopPort>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

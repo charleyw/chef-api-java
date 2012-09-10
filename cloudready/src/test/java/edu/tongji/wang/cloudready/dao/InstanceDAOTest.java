@@ -40,7 +40,7 @@ public class InstanceDAOTest {
         List<Instance> ins = dao.getAllInstances();
         
         for(Instance in : ins){
-            System.out.println("id:"+in.getId());
+            System.out.println("id:"+in.getId() + "status:" + in.getStatus() + "time:" + in.getStartTime());
             for(Server s : in.getServers()){
             	System.out.println("\tserverId:"+s.getId());	
             }
