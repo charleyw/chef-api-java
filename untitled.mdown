@@ -1,25 +1,25 @@
 ## Install require software
 
-	yum install -y java-1.6.0-openjdk httpd nsca-client
-    yum install -y http://dist.dev.int.realestate.com.au/casa/casa-homeideas/reastatsd-0.9.3-0003.noarch.rpm 
+	yum install -y java-1.6.0-openjdk httpd nsca-client<br>
+    yum install -y http://dist.dev.int.realestate.com.au/casa/casa-homeideas/reastatsd-0.9.3-0003.noarch.rpm<br> 
 
   #start httpd  
 
-    /etc/init.d/httpd start 
+    /etc/init.d/httpd start<br> 
          
   #start reastatsd
    
-    /etc/init.d/reastatsd start
+    /etc/init.d/reastatsd start<br>
 
   #install tomcat
 
-    cd /tmp
-    wget http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.35/bin/apache-tomcat-6.0.35.tar.gz
-    mkdir -p /opt/apps/
-    #untar tomcat to install dir
-    tar zxvf apache-tomcat-6.0.35.tar.gz -C /opt/apps/
-    #rename the tomcat install dir to "tomcat"
-    mv /opt/apps/apache-tomcat-6.0.35 /opt/apps/tomcat
+    cd /tmp<br>
+    wget http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.35/bin/apache-tomcat-6.0.35.tar.gz<br>
+    mkdir -p /opt/apps/<br>
+    #untar tomcat to install dir<br>
+    tar zxvf apache-tomcat-6.0.35.tar.gz -C /opt/apps/<br>
+    #rename the tomcat install dir to "tomcat"<br>
+    mv /opt/apps/apache-tomcat-6.0.35 /opt/apps/tomcat<br>
 
 ### Download hi-deploy-config.tgz and untar
 
