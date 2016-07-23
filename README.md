@@ -13,3 +13,7 @@ This project is a java implemented chef api client.
     cac.post("/nodes").body("req body").execute();
     cac.delete("/nodes").execute();
     cac.put("/nodes").body("req body").execute();
+
+## Liscense
+
+This code is distributed under the **MIT** license.
