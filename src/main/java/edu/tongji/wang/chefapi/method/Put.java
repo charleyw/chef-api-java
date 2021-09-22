@@ -11,6 +11,7 @@ public class Put extends ApiMethod{
 	}
 	
 	public ApiMethod body(String body){
+		this.reqBody=body;
 		PutMethod put = (PutMethod) method;
 		put.setRequestBody(body);
 		return this;
