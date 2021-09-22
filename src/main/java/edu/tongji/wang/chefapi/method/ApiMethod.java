@@ -60,9 +60,9 @@ public class ApiMethod {
 			method.addRequestHeader("X-Ops-Authorization-" + (i + 1), auth_headers[i]);
 		}
 		
-		int code = 0;
+		returnCode = 0;
 		try {
-			code = client.executeMethod(method);
+			returnCode = client.executeMethod(method);
 		} catch (HttpException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
